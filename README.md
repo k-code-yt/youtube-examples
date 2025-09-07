@@ -1,98 +1,124 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Server-Sent Events (SSE) with NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+An educational project demonstrating Server-Sent Events (SSE) implementation using NestJS backend and vanilla HTML/JavaScript frontend.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 What You'll Learn
 
-## Description
+- How to implement Server-Sent Events in NestJS
+- Real-time data streaming from server to client
+- Proper connection management and cleanup
+- Building a simple SSE testing interface
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🔧 How It Works
 
-## Project setup
+### Backend (NestJS)
 
-```bash
-$ yarn install
+The SSE endpoint is implemented in `app.controller.ts`:
+
+```typescript
+@Controller('event')
+export class AppController {
+  @Sse('timer')
+  addTimer(@Req() request): Observable<MessageEvent> {
+    // Creates an interval that sends time updates every second
+    // Properly handles client disconnection with cleanup
+  }
+}
 ```
 
-## Compile and run the project
+**Key Features:**
 
-```bash
-# development
-$ yarn run start
+- ✅ Real-time timer updates every second
+- ✅ Automatic cleanup on client disconnect
+- ✅ Proper error handling and logging
+- ✅ Uses RxJS for reactive programming
 
-# watch mode
-$ yarn run start:dev
+### Frontend (HTML/JavaScript)
 
-# production mode
-$ yarn run start:prod
+The testing interface provides:
+
+- 🔗 Customizable SSE endpoint URL
+- 📊 Connection status monitoring
+- 📈 Real-time statistics (message count, connection time)
+- 📝 Activity logging
+- 🎛️ Simple connect/disconnect controls
+
+## 🌐 API Endpoints
+
+| Method | Endpoint       | Description                            |
+| ------ | -------------- | -------------------------------------- |
+| GET    | `/event/timer` | SSE endpoint that streams time updates |
+
+### SSE Message Format
+
+```json
+{
+  "type": "time-change",
+  "data": {
+    "time": "2025-01-15T10:30:45.123Z"
+  }
+}
 ```
 
-## Run tests
+## 🧪 Testing the Implementation
+
+1. **Start the server:**
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. **Test with curl:**
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+curl -N -H "Accept: text/event-stream" http://localhost:3000/event/timer
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+3. **Test with the HTML interface:**
+   - Open `sse-tester.html`
+   - Connect to `http://localhost:3000/event/timer`
+   - Watch real-time updates
 
-## Resources
+## 💡 Use Cases for SSE
 
-Check out a few resources that may come in handy when working with NestJS:
+Server-Sent Events are perfect for:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **Real-time dashboards** - Stock prices, analytics
+- **Live notifications** - Chat messages, alerts
+- **Progress updates** - File uploads, long-running tasks
+- **Live feeds** - News updates, social media feeds
+- **Monitoring systems** - Server metrics, log streams
 
-## Support
+## 🔍 Troubleshooting
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Common Issues
 
-## Stay in touch
+1. **CORS Errors:**
+   - Make sure your frontend is served from the same origin
+   - Or configure CORS in your NestJS application
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2. **Connection Drops:**
+   - Check network stability
+   - Verify server is running on correct port
+   - Review browser console for errors
 
-## License
+3. **No Messages Received:**
+   - Verify the endpoint URL is correct
+   - Check server logs for connection status
+   - Ensure Accept header is set to `text/event-stream`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 🎓 Learning Resources
+
+- [MDN - Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
+- [NestJS SSE Documentation](https://docs.nestjs.com/techniques/server-sent-events)
+- [EventSource API Reference](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
+
+## 📺 Video Tutorial
+
+Watch the complete tutorial on YouTube: [Building Real-Time Apps with Server-Sent Events](https://youtube.com/@k-code-yt)
+
+## 🔗 Links
+
+- **GitHub Repository:** https://github.com/k-code-yt/youtube-examples/tree/sse-example
+- **YouTube Channel:** https://youtube.com/@k-code-yt
+- **NestJS Documentation:** https://docs.nestjs.com/
