@@ -16,7 +16,7 @@ export type OrderParams = {
 };
 
 export class Order {
-  private constructor(private params: OrderParams) {}
+  constructor(private params: OrderParams) {}
 
   static create(customerId: string, totalAmount: number): Order {
     const now = new Date();

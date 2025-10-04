@@ -1,7 +1,7 @@
 import { Order } from '../../domain/order.entity';
 import { OrderRepositorySaveDTO } from '../dtos/order-repository-save.dto';
 
-export interface IOrderRepository {
-  getOrder(id: string): Promise<Order | null>;
-  save(dto: OrderRepositorySaveDTO): Promise<void>;
+export abstract class IOrderRepository {
+  abstract getOrder(id: string): Promise<Order | null>;
+  abstract save(dto: OrderRepositorySaveDTO): Promise<void>;
 }
